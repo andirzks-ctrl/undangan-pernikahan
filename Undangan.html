@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Undangan Digital</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: linear-gradient(135deg, #4686C6, #3D638A);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #333;
+    }
+
+    .card {
+      background: #F6F7F9;
+      width: 100%;
+      max-width: 420px;
+      border-radius: 20px;
+      padding: 20px 30px 30px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      text-align: center;
+      animation: fadeIn 1.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .cover {
+      width: 100%;
+      height: 220px;
+      overflow: hidden;
+      border-radius: 16px;
+      margin-bottom: 20px;
+    }
+
+    .cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .title { font-size: 26px; font-weight: 700; margin-bottom: 6px; color: #3D638A; }
+    .subtitle { font-size: 14px; letter-spacing: 1px; margin-bottom: 25px; color: #666; }
+
+    .details { font-size: 15px; line-height: 1.7; margin: 20px 0; }
+
+    .name {
+      font-size: 22px;
+      font-weight: 600;
+      margin: 18px 0 10px;
+      color: #AC5625;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      position: relative;
+      text-align: center;
+      flex-wrap: wrap;
+    }
+
+    .name.long {
+      font-size: 18px;
+      line-height: 1.4;
+    }
+
+    .reveal {
+      animation: cinematicReveal 1.6s cubic-bezier(.4,0,.2,1) forwards;
+      filter: blur(12px);
+    }
+
+    @keyframes cinematicReveal {
+      0% { opacity: 0; transform: translateY(14px); filter: blur(12px); }
+      60% { opacity: 1; filter: blur(4px); }
+      100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+    }
+
+    @keyframes revealName {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .photo-undangan {
+      width: 100%;
+      margin: 12px 0 20px;
+    }
+
+    .photo-undangan img {
+      width: 100%;
+      border-radius: 18px;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .photo-undangan img:hover {
+      transform: scale(1.08);
+    }
+
+    @keyframes slowZoom {
+      from { transform: scale(1); }
+      to { transform: scale(1.06); }
+    }
+
+    .name::before,
+    .name::after {
+      content: "";
+      width: 38px;
+      height: 18px;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 30"><path d="M5 15 Q50 -5 95 15" stroke="%23AC5625" fill="none" stroke-width="2"/></svg>') no-repeat center;
+      background-size: contain;
+      opacity: 0.5;
+    }
+
+    .countdown-box {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .countdown-item {
+      background: #F6F7F9;
+      border: 2px solid #4686C6;
+      border-radius: 14px;
+      padding: 10px 12px;
+      min-width: 70px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+    }
+
+    .countdown-item strong {
+      display: block;
+      font-size: 20px;
+      color: #3D638A;
+    }
+
+    .countdown-item span { font-size: 11px; color: #777; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 20px;
+      padding: 12px 22px;
+      background: linear-gradient(135deg, #4686C6, #3D638A);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 30px;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .btn:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 10px 20px rgba(0,0,0,0.18); }
+
+    .btn-lokasi {
+      background: transparent;
+      color: #AC5625;
+      border: 2px solid #AC5625;
+    }
+
+    .slider { margin: 20px 0; column-count: 1; column-gap: 5px; display: flex; flex-direction: column; align-items: center;}
+    .slide { width: 95%; margin-bottom: 26px;}
+    .slide img { width: 100%; border-radius: 16px; object-fit: cover; transition: transform 0.6s ease, box-shadow 0.6s ease; }
+    .slide img:hover { transform: scale(1.06);  box-shadow: 0 18px 36px rgba(0,0,0,0.18);
+}
+
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal.active { display: flex; }
+    .modal img { max-width: 90%; max-height: 90%; border-radius: 12px; }
+
+    .ucapan { margin-top: 25px; display: flex; flex-direction: column; align-items: center; }
+
+    .ucapan-list {
+      margin-top: 20px;
+      text-align: left;
+      width: 100%;
+      max-height: 260px;
+      overflow-y: auto;
+    }
+
+    .ucapan-item {
+      width: 92%;
+      margin: 0 auto 12px auto;
+      padding: 10px 12px;
+      background: #F6F7F9;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    .ucapan-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .footer { margin-top: 25px; font-size: 13px; color: #777; }
+  </style>
+</head>
+<body>
+
+  <audio id="bgMusic" autoplay loop>
+  <source src="music.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- HALAMAN INPUT -->
+  <div class="card" id="pageInput">
+    <div class="cover"><img src="cover.jpg" alt="Cover"></div>
+    <div class="title">WEDDING INVITATION</div>
+    <div class="subtitle">ANDIMAS & AINI</div>
+
+    <div class="details">
+      <div style="display:flex;gap:10px;margin-bottom:12px;">
+        <select id="sapaan" style="width:35%;padding:12px;border-radius:10px;border:1px solid #ccc;">
+          <option value="Bapak">Bapak</option>
+          <option value="Ibu">Ibu</option>
+          <option value="Tuan">Tuan</option>
+          <option value="Nyonya">Nyonya</option>
+          <option value="Kakak">Kakak</option>
+        </select>
+        <input type="text" id="namaTamu" placeholder="Nama Lengkap Tamu" style="width:65%;padding:12px;border-radius:10px;border:1px solid #ccc;">
+      </div>
+      <select id="asalTamu" style="width:100%;padding:12px;border-radius:10px;border:1px solid #ccc;">
+        <option value="Mempelai Wanita">Tamu dari Mempelai Wanita</option>
+        <option value="Mempelai Pria">Tamu dari Mempelai Pria</option>
+        <option value="Orang Tua Mempelai Pria">Orang Tua Mempelai Pria</option>
+        <option value="Orang Tua Mempelai Wanita">Orang Tua Mempelai Wanita</option>
+      </select>
+    </div>
+
+    <button class="btn" onclick="bukaUndangan()">Buka Undangan</button>
+  </div>
+
+  <!-- HALAMAN UNDANGAN -->
+  <div class="card" id="pageUndangan" style="display:none;">
+    <div class="title">WEDDING INVITATION</div>
+    <div class="subtitle">ANDIMAS & AINI</div>
+
+    <div class="details">
+      Dengan penuh kebahagiaan kami mengundang
+      <div class="name reveal" id="namaOutput"></div>
+      <div class="photo-undangan"><img src="cover.jpg" alt="Foto Pasangan"></div>
+      
+    </div>
+
+    <div class="details">
+      <strong>Resepsi Pernikahan</strong><br>
+      Sabtu, 6 Juni 2026<br>
+      Pukul 10.00 WIB<br>
+      Di Kediaman Mempelai Wanita
+    </div>
+
+    <div class="countdown-box" id="countdown"></div>
+
+    <div class="slider" id="gallery">
+      <div class="slide"><img src="Foto 1.jpg" onclick="openModal(this)"></div>
+      <div class="slide"><img src="Foto 2.jpg" onclick="openModal(this)"></div>
+      <div class="slide"><img src="Foto 3.jpg" onclick="openModal(this)"></div>
+      <div class="slide"><img src="Foto 4.jpg" onclick="openModal(this)"></div>
+      <div class="slide"><img src="Foto 5.jpg" onclick="openModal(this)"></div>
+    </div>
+
+    <div class="modal" id="photoModal" onclick="closeModal()"><img id="modalImg"></div>
+
+    <div class="ucapan">
+      <strong>Ucapan & Doa</strong>
+      <textarea id="inputUcapan" placeholder="Tulis ucapan kamu di sini" style="width:95%;min-height:140px;padding:14px;border-radius:14px;border:1px solid #ccc;"></textarea>
+      <button class="btn" onclick="kirimUcapan()">Kirim Ucapan</button>
+       <a href="https://maps.app.goo.gl/egbfxbApZTwvbxcV6" target="_blank" class="btn btn-lokasi">Lihat Lokasi</a>
+      <div class="ucapan-list" id="listUcapan"></div>
+    </div>
+
+    <div class="footer">Terima kasih atas doa dan kehadiranmu</div>
+  </div>
+
+<script>
+  function bukaUndangan(){
+    const sapaan = document.getElementById('sapaan').value;
+    const nama = document.getElementById('namaTamu').value;
+
+    if(nama.trim()===''){ alert('Nama tamu belum diisi'); return; }
+
+    const fullName = sapaan + ' ' + nama;
+    const nameEl = document.getElementById('namaOutput');
+    nameEl.innerText = fullName;
+
+    if(fullName.length > 28){ nameEl.classList.add('long'); }
+
+    document.getElementById('pageInput').style.display='none';
+    document.getElementById('pageUndangan').style.display='block';
+
+    const music = document.getElementById('bgMusic');
+    music.play();
+
+  }
+
+  function kirimUcapan(){
+    const teks = document.getElementById('inputUcapan').value;
+    if(teks.trim()==='') return;
+
+    const now = new Date();
+    const waktu = now.toLocaleDateString('id-ID',{day:'2-digit',month:'long'})+' '+now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+
+    const div = document.createElement('div');
+    div.className='ucapan-item';
+    div.innerHTML=`<div class="ucapan-header"><strong>${document.getElementById('namaOutput').innerText}</strong><span>${waktu}</span></div><div>${teks}</div>`;
+    document.getElementById('listUcapan').prepend(div);
+    document.getElementById('inputUcapan').value='';
+  }
+
+  function openModal(img){
+    document.getElementById('modalImg').src = img.src;
+    document.getElementById('photoModal').classList.add('active');
+  }
+
+  function closeModal(){ document.getElementById('photoModal').classList.remove('active'); }
+
+  const targetDate = new Date('2026-06-06T10:00:00');
+  const countdownEl = document.getElementById('countdown');
+  setInterval(()=>{
+    const diff = targetDate - new Date();
+    if(diff<=0){ countdownEl.innerHTML='<div class="countdown-item"><strong>0</strong><span>Hari Ini</span></div>'; return; }
+    const d=Math.floor(diff/86400000);
+    const h=Math.floor(diff/3600000)%24;
+    const m=Math.floor(diff/60000)%60;
+    countdownEl.innerHTML=`<div class="countdown-item"><strong>${d}</strong><span>Hari</span></div><div class="countdown-item"><strong>${h}</strong><span>Jam</span></div><div class="countdown-item"><strong>${m}</strong><span>Menit</span></div>`;
+  },1000);
+</script>
+
+</body>
+</html>
